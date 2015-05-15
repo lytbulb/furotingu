@@ -1,0 +1,46 @@
+---
+http_interactions:
+- request:
+    method: head
+    uri: https://lytbulb2-development.s3.amazonaws.com/tasks/1/bipbapboop.gif
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Content-Type:
+      - ''
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby2/2.0.41 ruby/2.1.2 x86_64-darwin14.0 resources
+      Date:
+      - Tue, 12 May 2015 04:23:10 GMT
+      Authorization:
+      - AWS AKIAJBNX4L5QLJ2HBKWQ:M5v4bxW0jR9n6HMPNc8UqOHO5G8=
+      Content-Length:
+      - '0'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      X-Amz-Request-Id:
+      - BA9BC96C74EE56C9
+      X-Amz-Id-2:
+      - iOaCe/Vjze9DaxufMK6Z7tOZKMHEUasU8UeYJiBjgOQwYeAAsrA0Yzm3PW/y5eD0DYRfWHKTo+4=
+      Content-Type:
+      - application/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Tue, 12 May 2015 04:23:12 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Tue, 12 May 2015 04:23:11 GMT
+recorded_with: VCR 2.9.0

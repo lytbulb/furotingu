@@ -1,0 +1,2 @@
+require "./furotingu"
+run Furotingu

@@ -6,26 +6,6 @@ require "aws-sdk"
 require "net/http"
 Dotenv.load
 
-# implementation notes:
-# use firebase rest api
-# looks like we need the token from ember, how do we get it from ember?
-# consume json body w/ auth object
-
-# paths: upload, download, delete action
-# expects:
-# + firebase auth object (uuid, token, provider)
-# + key (path to file)
-# does:
-# + authorizes action w/ key path (owning path mostly, e.g. task)
-# + configures aws credentials
-# + for upload, checks bucket and key for existing resource at that key
-# + adjusts key (increment or timestamp?) if there is a conflict
-# + requests presigned_url
-# returns:
-# + presigned_url for put or get or deletes object
-# + maybe adjusted key
-# + forbidden if auth doesn't have permission
-
 class Furotingu < Sinatra::Base
   class ParameterMissingError < StandardError
     def initialize(key)
@@ -53,8 +33,8 @@ class Furotingu < Sinatra::Base
 
   before do
     content_type :json
-    headers 'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => ['OPTIONS', 'POST']
+    headers "Access-Control-Allow-Origin" => "*",
+            "Access-Control-Allow-Methods" => ["OPTIONS", "POST"]
   end
 
   post "/url_for_upload" do
@@ -95,7 +75,9 @@ class Furotingu < Sinatra::Base
   helpers do
     def json_error(ex, code, errors = {})
       halt(code,
-           { "Content-Type" => "application/json" },
+           { "Content-Type" => "application/json",
+             "Access-Control-Allow-Origin" => "*",
+             "Access-Control-Allow-Methods" => ["OPTIONS", "POST"] },
            JSON.dump({ message: ex.message }.merge(errors)))
     end
 

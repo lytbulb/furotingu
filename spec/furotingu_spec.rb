@@ -22,20 +22,27 @@ describe Furotingu do
         end
       end
 
+      context "when the user is unauthorized to access the Firebase object" do
+        it "should return json object with error" do
+          response = double("response", code: 401)
+          allow(HTTParty).to receive(:get).and_return(response)
+
+          post "/url_for_upload", JSON.dump(valid_body)
+          expect(last_response.status).to eq(401)
+          expect(JSON.parse(last_response.body)).to eq(errors)
+        end
+
+        def errors
+          {"message" => "You do not have appropriate access for this operation"}
+        end
+      end
+
       context "when there is valid input", :vcr do
         it "should return json object with presigned_url for upload" do
           post "/url_for_upload", JSON.dump(valid_body)
           expect(last_response.status).to eq(200)
           expect(JSON.parse(last_response.body)["presigned_url"])
             .to include(presigned_upload_url_stub)
-        end
-
-        def valid_body
-          { firebase_authentication: {},
-            firebase_authorization_path: "",
-            target_path: "/tasks/1/",
-            content_type: "image/gif",
-            filename: "bipbapboop.gif" }
         end
 
         def presigned_upload_url_stub
@@ -59,19 +66,27 @@ describe Furotingu do
         end
       end
 
+      context "when the user is unauthorized to access the Firebase object" do
+        it "should return json object with error" do
+          response = double("response", code: 401)
+          allow(HTTParty).to receive(:get).and_return(response)
+
+          post "/url_for_download", JSON.dump(valid_body)
+          expect(last_response.status).to eq(401)
+          expect(JSON.parse(last_response.body)).to eq(errors)
+        end
+
+        def errors
+          {"message" => "You do not have appropriate access for this operation"}
+        end
+      end
+
       context "when there is valid input", :vcr do
         it "should return json object with presigned_url for download" do
           post "/url_for_download", JSON.dump(valid_body)
           expect(last_response.status).to eq(200)
           expect(JSON.parse(last_response.body)["presigned_url"])
             .to include(presigned_download_url_stub)
-        end
-
-        def valid_body
-          { firebase_authentication: {},
-            firebase_authorization_path: "",
-            target_path: "/tasks/1/",
-            filename: "bipbapboop.gif" }
         end
 
         def presigned_download_url_stub
@@ -95,19 +110,34 @@ describe Furotingu do
         end
       end
 
+      context "when the user is unauthorized to access the Firebase object" do
+        it "should return json object with error" do
+          response = double("response", code: 401)
+          allow(HTTParty).to receive(:get).and_return(response)
+
+          post "/delete_object", JSON.dump(valid_body)
+          expect(last_response.status).to eq(401)
+          expect(JSON.parse(last_response.body)).to eq(errors)
+        end
+
+        def errors
+          {"message" => "You do not have appropriate access for this operation"}
+        end
+      end
+
       context "when there is valid input", :vcr do
         it "should return 200 status" do
           post "/delete_object", JSON.dump(valid_body)
           expect(last_response.status).to eq(200)
         end
-
-        def valid_body
-          { firebase_authentication: {},
-            firebase_authorization_path: "",
-            target_path: "/tasks/1/",
-            filename: "bipbapboop.gif" }
-        end
       end
     end
+  end
+
+  def valid_body
+    { fire: 'simple:1234',
+      target_path: "/tasks/1/",
+      content_type: "image/gif",
+      filename: "bipbapboop.gif" }
   end
 end

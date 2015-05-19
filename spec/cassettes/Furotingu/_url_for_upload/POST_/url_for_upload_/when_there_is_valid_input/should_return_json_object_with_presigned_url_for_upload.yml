@@ -1,6 +1,37 @@
 ---
 http_interactions:
 - request:
+    method: get
+    uri: https://sizzling-heat-9976.firebaseio.com/development/tasks/1.json?auth=&shallow=true
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '4'
+      Strict-Transport-Security:
+      - max-age=31556926; includeSubDomains; preload
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - no-cache
+    body:
+      encoding: UTF-8
+      string: 'null'
+    http_version:
+  recorded_at: Tue, 19 May 2015 04:00:39 GMT
+- request:
     method: head
     uri: https://lytbulb2-development.s3.amazonaws.com/tasks/1/bipbapboop.gif
     body:
@@ -12,11 +43,11 @@ http_interactions:
       Accept-Encoding:
       - ''
       User-Agent:
-      - aws-sdk-ruby2/2.0.41 ruby/2.1.2 x86_64-darwin14.0 resources
+      - aws-sdk-ruby2/2.0.43 ruby/2.1.2 x86_64-darwin14.0 resources
       Date:
-      - Tue, 12 May 2015 04:23:10 GMT
+      - Tue, 19 May 2015 04:00:39 GMT
       Authorization:
-      - AWS AKIAJBNX4L5QLJ2HBKWQ:M5v4bxW0jR9n6HMPNc8UqOHO5G8=
+      - AWS
       Content-Length:
       - '0'
       Accept:
@@ -27,20 +58,20 @@ http_interactions:
       message: Not Found
     headers:
       X-Amz-Request-Id:
-      - BA9BC96C74EE56C9
+      -
       X-Amz-Id-2:
-      - iOaCe/Vjze9DaxufMK6Z7tOZKMHEUasU8UeYJiBjgOQwYeAAsrA0Yzm3PW/y5eD0DYRfWHKTo+4=
+      -
       Content-Type:
       - application/xml
       Transfer-Encoding:
       - chunked
       Date:
-      - Tue, 12 May 2015 04:23:12 GMT
+      - Tue, 19 May 2015 04:00:39 GMT
       Server:
       - AmazonS3
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Tue, 12 May 2015 04:23:11 GMT
-recorded_with: VCR 2.9.0
+    http_version:
+  recorded_at: Tue, 19 May 2015 04:00:40 GMT
+recorded_with: VCR 2.9.3

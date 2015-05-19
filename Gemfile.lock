@@ -17,10 +17,16 @@ GEM
       safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)
     dotenv (2.0.1)
+    firebase_token_generator (2.0.0)
+    httparty (0.13.4)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
     jmespath (1.0.2)
       multi_json (~> 1.0)
+    json (1.8.2)
     method_source (0.8.2)
     multi_json (1.11.0)
+    multi_xml (0.5.5)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -70,6 +76,8 @@ PLATFORMS
 DEPENDENCIES
   aws-sdk
   dotenv
+  firebase_token_generator
+  httparty
   pry
   puma
   rack-test

@@ -6,8 +6,10 @@ gem "sinatra"
 gem "sinatra-contrib"
 gem "dotenv"
 gem "aws-sdk"
+gem "firebase_token_generator"
+gem "httparty"
 
-group :test do
+group :development do
   gem "pry"
 end
 

@@ -3,6 +3,7 @@ require "bundler/setup"
 Bundler.require(:default)
 require "json"
 require "aws-sdk"
+require "net/http"
 Dotenv.load
 
 # implementation notes:
@@ -36,8 +37,18 @@ class Furotingu < Sinatra::Base
     end
   end
 
+  class Unauthorized < StandardError
+    def to_s
+      %Q{You do not have appropriate access for this operation}
+    end
+  end
+
   error ParameterMissingError do
     halt_with_json_error 400
+  end
+
+  error Unauthorized do
+    halt_with_json_error 401
   end
 
   before do
@@ -48,8 +59,13 @@ class Furotingu < Sinatra::Base
 
   post "/url_for_upload" do
     @data = JSON.parse(request.body.read) rescue {}
+
     validate_data
+    authenticate
+    authorize
+
     adjust_filename_if_needed
+
     @body = { presigned_url: presigned_upload_url,
               adjusted_filename: @data["adjusted_filename"] }
     json @body
@@ -57,13 +73,21 @@ class Furotingu < Sinatra::Base
 
   post "/url_for_download" do
     @data = JSON.parse(request.body.read) rescue {}
+
     validate_data(skips: ["content_type"])
+    authenticate
+    authorize
+
     json :presigned_url => presigned_download_url
   end
 
   post "/delete_object" do
     @data = JSON.parse(request.body.read) rescue {}
+
     validate_data(skips: ["content_type"])
+    authenticate
+    authorize
+
     delete_object
     json ""
   end
@@ -81,7 +105,7 @@ class Furotingu < Sinatra::Base
 
     def validate_data(options = {})
       skips = options.fetch(:skips, [])
-      expected = %w(target_path filename content_type)
+      expected = %w(fire target_path filename content_type)
       to_check = expected - skips
 
       raise ParameterMissingError, "target_path" unless @data.keys.any?
@@ -89,6 +113,23 @@ class Furotingu < Sinatra::Base
       to_check.each do |parameter|
         raise ParameterMissingError, parameter unless @data[parameter]
       end
+    end
+
+    def authenticate
+      payload = { uid: @data["fire"] }
+      generator = Firebase::FirebaseTokenGenerator.new(ENV["FIREBASE_SECRET"])
+      @token = generator.create_token(payload)
+    end
+
+    def firebase_target_url
+      path = target_path
+      path = path.chop if path[-1] == "/"
+      "#{ENV["FIREBASE_URL"]}#{path}.json?shallow=true&auth=#{@token}"
+    end
+
+    def authorize
+      response = HTTParty.get(firebase_target_url)
+      raise Unauthorized unless response.code == 200
     end
 
     def adjust_filename_if_needed

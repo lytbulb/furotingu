@@ -44,11 +44,7 @@ class Furotingu < Sinatra::Base
     authenticate
     authorize
 
-    adjust_filename_if_needed
-
-    @body = { presigned_url: presigned_upload_url,
-              adjusted_filename: @data["adjusted_filename"] }
-    json @body
+    json :presigned_url => presigned_upload_url
   end
 
   post "/url_for_download" do
@@ -114,10 +110,6 @@ class Furotingu < Sinatra::Base
       raise Unauthorized unless response.code == 200
     end
 
-    def adjust_filename_if_needed
-      @data["adjusted_filename"] = object.exists? ? adjusted_filename : nil
-    end
-
     def presigned_upload_url
       @presigned_upload_url ||=
         object.presigned_url(:put,
@@ -156,22 +148,8 @@ class Furotingu < Sinatra::Base
       @object_key ||= "#{target_path}#{@data["filename"]}"
     end
 
-    def get_object
-      s3_resource.bucket(ENV["AWS_S3_BUCKET"]).object(object_key)
-    end
-
     def object
-      @object ||= get_object
-    end
-
-    def reset_object_key_with(new_filename)
-      @object_key = "#{target_path}#{new_filename}"
-    end
-
-    # todo - implement
-    # use reset_object_key_with, etc
-    def adjusted_filename
-      @data["filename"]
+      @object ||= s3_resource.bucket(ENV["AWS_S3_BUCKET"]).object(object_key)
     end
   end
 end

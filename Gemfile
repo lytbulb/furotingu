@@ -1,17 +1,7 @@
-source "https://rubygems.org"
-ruby "2.1.2"
+source 'https://rubygems.org'
 
-gem "puma"
-gem "sinatra"
-gem "sinatra-contrib"
-gem "dotenv"
-gem "aws-sdk"
-gem "firebase_token_generator"
-gem "httparty"
-
-group :development do
-  gem "pry"
-end
+# Specify your gem's dependencies in furotingu.gemspec
+gemspec
 
 group :test do
   gem "rspec"

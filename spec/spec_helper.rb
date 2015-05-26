@@ -4,7 +4,7 @@ ENV["RACK_ENV"] = "test"
 require 'bundler/setup'
 Bundler.require(:test)
 
-require File.expand_path(File.dirname(__FILE__) + "/../furotingu")
+require File.expand_path(File.dirname(__FILE__) + "/../lib/furotingu")
 
 RSpec.configure do |conf|
   conf.include Rack::Test::Methods

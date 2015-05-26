@@ -5,7 +5,7 @@ require "json"
 describe Furotingu do
 
   def app
-    @app ||= Furotingu
+    @app ||= Furotingu::App
   end
 
   describe "#url_for_upload" do

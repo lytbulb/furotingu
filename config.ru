@@ -1,2 +1,2 @@
-require "./furotingu"
-run Furotingu
+require "furotingu"
+run Furotingu::App

@@ -29,12 +29,28 @@ module Furotingu
       end
     end
 
+    class InsecureConnection < StandardError
+      def to_s
+        %Q{This service is only available over https}
+      end
+    end
+
     error ParameterMissingError do
       halt_with_json_error 400
     end
 
     error Unauthorized do
       halt_with_json_error 401
+    end
+
+    error InsecureConnection do
+      halt_with_json_error 401
+    end
+
+    before do
+      if settings.environment == :production && !request.secure?
+        raise InsecureConnection
+      end
     end
 
     before do

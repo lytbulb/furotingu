@@ -117,14 +117,14 @@ module Furotingu
 
       def authenticate
         payload = { uid: @data["fire"] }
-        generator = Firebase::FirebaseTokenGenerator.new(ENV["FIREBASE_SECRET"])
+        generator = Firebase::FirebaseTokenGenerator.new(ENV.fetch("FIREBASE_SECRET"))
         @token = generator.create_token(payload)
       end
 
       def firebase_target_url
         path = target_path
         path = path.chop if path[-1] == "/"
-        "#{ENV["FIREBASE_URL"]}#{path}.json?shallow=true&auth=#{@token}"
+        "#{ENV.fetch("FIREBASE_URL")}#{path}.json?shallow=true&auth=#{@token}"
       end
 
       def authorize
@@ -136,13 +136,13 @@ module Furotingu
         @presigned_upload_url ||=
           object.presigned_url(:put,
                                :content_type => @data["content_type"],
-                               :expires_in => ENV["AWS_UPLOAD_URL_EXPIRATION"].to_i)
+                               :expires_in => ENV.fetch("AWS_UPLOAD_URL_EXPIRATION").to_i)
       end
 
       def presigned_download_url
         @presigned_download_url ||=
           object.presigned_url(:get,
-                               :expires_in => ENV["AWS_DOWNLOAD_URL_EXPIRATION"].to_i)
+                               :expires_in => ENV.fetch("AWS_DOWNLOAD_URL_EXPIRATION").to_i)
       end
 
       def delete_object
@@ -155,8 +155,8 @@ module Furotingu
             @s3_resource
           else
             credentials =
-              Aws::Credentials.new(ENV["AWS_ACCESS_KEY_ID"],
-                                   ENV["AWS_SECRET_ACCESS_KEY"])
+              Aws::Credentials.new(ENV.fetch("AWS_ACCESS_KEY_ID"),
+                                   ENV.fetch("AWS_SECRET_ACCESS_KEY"))
 
             Aws::S3::Resource.new(credentials: credentials)
           end
@@ -171,7 +171,7 @@ module Furotingu
       end
 
       def object
-        @object ||= s3_resource.bucket(ENV["AWS_S3_BUCKET"]).object(object_key)
+        @object ||= s3_resource.bucket(ENV.fetch("AWS_S3_BUCKET")).object(object_key)
       end
     end
   end

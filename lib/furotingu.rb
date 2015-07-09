@@ -9,7 +9,10 @@ require "httparty"
 require "sinatra/json"
 require "aws-sdk"
 require "net/http"
-Dotenv.load
+
+env_file = ENV["RACK_ENV"] ? ".env.#{ENV["RACK_ENV"]}" : ".env.development"
+
+Dotenv.load('.env', env_file)
 
 module Furotingu
   class App < Sinatra::Base

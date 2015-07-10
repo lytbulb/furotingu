@@ -69,7 +69,7 @@ module Furotingu
       authenticate
       authorize
 
-      json :presigned_url => presigned_upload_url
+      json presigned_upload
     end
 
     post "/url_for_download" do
@@ -135,11 +135,15 @@ module Furotingu
         raise Unauthorized unless response.code == 200
       end
 
-      def presigned_upload_url
-        @presigned_upload_url ||=
-          object.presigned_url(:put,
-                               :content_type => @data["content_type"],
-                               :expires_in => ENV.fetch("AWS_UPLOAD_URL_EXPIRATION").to_i)
+      def presigned_upload
+        @presigned_upload ||=
+          begin
+            post = object.presigned_post(:content_type => @data["content_type"],
+                                         :content_disposition => "attachment;",
+                                         :allow_any => ["name"],
+                                         :success_action_status => "201")
+            { :presigned_url => post.url, :aws_fields => post.fields }
+          end
       end
 
       def presigned_download_url

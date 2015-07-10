@@ -41,12 +41,7 @@ describe Furotingu do
         it "should return json object with presigned_url for upload" do
           post "/url_for_upload", JSON.dump(valid_body)
           expect(last_response.status).to eq(200)
-          expect(JSON.parse(last_response.body)["presigned_url"])
-            .to include(presigned_upload_url_stub)
-        end
-
-        def presigned_upload_url_stub
-          "/tasks/1/bipbapboop.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256"
+          expect(last_response.body.include?("key\":\"tasks/1/bipbapboop.gif")).to eq(true)
         end
       end
     end
